@@ -11,7 +11,7 @@
 #ifndef _MY_ERROR_H
 # define _MY_ERROR_H
 
-# define NF	"Please enter a file in param\n"
+# define NF	"Please enter a file in param(map/0.map)\n"
 # define WF	"Wrong format for map\n"
 # define NU	"No unit on the map\n"
 # define GS	"Grid too small\n"

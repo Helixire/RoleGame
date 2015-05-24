@@ -9,6 +9,7 @@
 */
 
 # include <stdlib.h>
+# include "tool.h"
 
 int	my_getnbr(char *str)
 {

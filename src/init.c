@@ -63,7 +63,7 @@ static int	add_line(char *line, int ***grid, int *sizeX)
   while (tab[++i] != NULL)
     lint[i] = my_getnbr(tab[i]);
   free_tab(tab);
-  if (add_to_grid(grid, lint) == 1 || lint[0] != 1 || lint[*sizeX - 1] != 1)
+  if (add_to_grid(grid, lint) == 1 || lint[0] != 0 || lint[*sizeX - 1] != 0)
     return (my_error(WF));
   return (0);
 }
@@ -75,7 +75,7 @@ static int	init_end(int **grid, t_unit **unit, int sizeX, int sizeY)
 
   x = -1;
   while (++x < sizeX)
-    if (grid[0][x] != 1 || grid[sizeY - 1][x] != 1)
+    if (grid[0][x] != 0 || grid[sizeY - 1][x] != 0)
       return (my_error(WF));
   y = 0;
   while (++y < sizeY - 1)
@@ -83,13 +83,13 @@ static int	init_end(int **grid, t_unit **unit, int sizeX, int sizeY)
       x = 0;
       while (++x < sizeX - 1)
 	{
-	  if (grid[y][x] == 1)
+	  if (grid[y][x] == 0)
 	    return (my_error(WF));
 	  else if (grid[y][x] > 10)
 	    {
 	      if (add_unit(unit, grid[y][x], x, y) != 0)
 		return (my_error(GE));
-	      grid[y][x] = 0;
+	      grid[y][x] = 1;
 	    }
 	}
     }
@@ -114,7 +114,7 @@ int	init(char *file, int ***grid, t_unit **unit)
   while ((tmp = get_next_line(fd)) != NULL)
     {
       if (add_line(tmp, grid, &x) == 1)
-	return (my_error(GE) - 1);
+	return (my_error(GE));
       y += 1;
     }
   close(fd);

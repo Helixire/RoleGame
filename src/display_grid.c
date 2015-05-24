@@ -52,16 +52,15 @@ void		display_grid(int **grid, char *name, t_unit *list)
   my_putstr(WHITE);
   my_putstr(BGGREEN);
   my_putname(name);
-  while (grid[++y_g][1] != 1)
+  while (grid[++y_g][1] != 0)
     {
       x_g = 0;
-      while (grid[y_g][++x_g] != 1)
+      while (grid[y_g][++x_g] != 0)
 	{
 	  if ((tmp = find_unit_at(list, x_g, y_g)) != NULL)
 	    (tmp->id > 41) ? my_putnbr_red(tmp->id) : my_putnbr_blue(tmp->id);
 	  else
 	    {
-	      (void)write(1, "0", 1);
 	      my_putnbr(grid[y_g][x_g]);
 	    }
 	  (void)write(1, " ", 1);

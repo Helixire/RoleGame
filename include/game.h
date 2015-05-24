@@ -11,8 +11,12 @@
 #ifndef _GAME_H_
 # define _GAME_H_
 
+# include <SDL/SDL.h>
 # include "tool.h"
 # include "my_error.h"
+
+# define TSIZE	32
+# define GRAPH	1
 
 # define EXIT	"exit"
 # define MAP	"map"
@@ -46,5 +50,6 @@ void		display_grid(int **grid, char *name, t_unit *list);
 int		move(int **tab, char *str, int unit, t_unit *list);
 int		loop(char *name, int **grid, t_unit **list);
 void		init_turn(t_unit *list, int *turn);
+int		loop_g(SDL_Surface *img[], int **grid, t_unit **list);
 
 #endif /* !_GAME_H_ */

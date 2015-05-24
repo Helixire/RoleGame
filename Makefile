@@ -17,6 +17,8 @@ NAME	= Game
 CFLAGS	+= -W -Wall -ansi -pedantic
 CFLAGS	+= -I./include
 
+LDFLAGS	= -lSDL -lSDL_image
+
 TOOL	= tool/list.c \
 	  tool/list2.c \
 	  tool/str.c \
@@ -32,6 +34,7 @@ SRC	= src/main.c \
 	  src/display_grid.c \
 	  src/attack.c \
 	  src/attack_unit.c \
+	  src/loop_g.c \
 	  $(TOOL)
 
 OBJ	= $(SRC:.c=.o)
@@ -39,7 +42,7 @@ OBJ	= $(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -o $(NAME)
+	$(CC) $(OBJ) -o $(NAME) $(LDFLAGS)
 
 clean:
 	$(RM) $(OBJ)
