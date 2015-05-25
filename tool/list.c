@@ -21,6 +21,7 @@ int		add_unit(t_unit **list, const int id, const int x, const int y)
     return (1);
   ret->id = id;
   ret->pv = 30;
+  ret->range = (((id > 40) ? (id - 40) / 10 : id / 10 - 1) == 0) ? 2 : 1;
   ret->x = x;
   ret->y = y;
   ret->next = NULL;

@@ -11,6 +11,10 @@
 #ifndef _TOOL_H
 # define _TOOL_H
 
+# include <SDL/SDL.h>
+
+# define ABS(x)	((x) < 0) ? (-(x)) : (x)
+
 # define SIZE	1024
 
 # define WHITE	"\033[37m"
@@ -20,9 +24,9 @@
 
 
 # define BGGREEN	"\033[42m"
-# define SLAIN " is dead].\n"
-# define ATTACK " as attacked of "
-# define HP " hp now."
+# define SLAIN		" is dead].\n"
+# define ATTACK		" as attacked of "
+# define HP		" hp now."
 
 typedef struct	s_unit
 {
@@ -31,7 +35,7 @@ typedef struct	s_unit
   int		x;
   int		y;
   int		move;
-  int		used;
+  int		range;
   struct s_unit	*next;
 }		t_unit;
 
@@ -54,5 +58,8 @@ int	free_grid(int **grid);
 int	free_tab(char **tab);
 void	my_putname(char *str);
 t_unit	*find_unit_at(t_unit *list, const int x, const int y);
+void	int_to_str(int nb, char str[]);
+void	my_revstr(char *str);
+void	print_str(SDL_Surface *screen, char *str, SDL_Color, SDL_Rect *pos);
 
 #endif /* !_TOOL_H */

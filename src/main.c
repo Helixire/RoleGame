@@ -11,9 +11,15 @@
 #include <stdlib.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
 #include "game.h"
 
-static int	start_maps(char **av, SDL_Surface *img[])
+TTF_Font	*g_font;
+SDL_Surface	*img[5];
+int		g_turn;
+t_unit		*g_sel;
+
+static int	start_maps(char **av)
 {
   int		**grid;
   t_unit	*unit;
@@ -36,7 +42,7 @@ static int	start_maps(char **av, SDL_Surface *img[])
 	  init_turn(unit, NULL);
 	  if (!GRAPH)
 	    display_grid(grid, av[i], unit);
-	  win = (GRAPH) ? loop_g(img, grid, &unit) : loop(av[i], grid, &unit);
+	  win = (GRAPH) ? loop_g(grid, &unit) : loop(av[i], grid, &unit);
 	}
       clean_unit(unit);
       free_grid(grid);
@@ -45,29 +51,34 @@ static int	start_maps(char **av, SDL_Surface *img[])
   return (win);
 }
 
-  int	main(int ac, char **av)
-  {
-    SDL_Surface	*img[4];
-    int		ret;
+int	main(int ac, char **av)
+{
+  int		ret;
 
-    (void)ac;
-    if (GRAPH)
-      {
-	if (SDL_Init(SDL_INIT_VIDEO) == -1 || /* INIT SDL */
-	    (img[0] = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL ||  /* Create Screen */
-	    (img[1] = IMG_Load("data/tiles.bmp")) == NULL ||  /* Load map img */
-	    (img[3] = IMG_Load("data/cursor.bmp")) == NULL || /* cursor       */
-	    (img[2] = IMG_Load("data/unit.bmp")) == NULL)     /* and unit     */
-	  return (my_error(SDL_GetError()));
-	SDL_WM_SetCaption("RoleGame", NULL); /* Change window name */
-      }
-    ret = start_maps(av + 1, img);
-    if (GRAPH)
-      {
-	SDL_FreeSurface(img[1]);
-	SDL_FreeSurface(img[2]);
-	SDL_FreeSurface(img[3]);
-	SDL_Quit(); /* i think you can guess it */
-      }
-    return (ret);
-  }
+  if (GRAPH)
+    {
+      if (SDL_Init(SDL_INIT_VIDEO) == -1 || /* INIT SDL */
+	  (img[0] = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL ||  /* Create Screen */
+	  (img[1] = IMG_Load("data/tiles.bmp")) == NULL ||  /* Load map img */
+	  (img[3] = IMG_Load("data/cursor.bmp")) == NULL || /* cursor       */
+	  (img[2] = IMG_Load("data/unit.bmp")) == NULL ||   /* and unit     */
+	  (img[4] = IMG_Load("data/selected.bmp")) == NULL ||
+	  TTF_Init() != 0)
+	return (my_error(SDL_GetError()));
+      SDL_WM_SetCaption("RoleGame", NULL); /* Change window name */
+      g_font = TTF_OpenFont("data/font/Lobster-Regular.ttf", 16);
+    }
+  g_turn = 0;
+  g_sel = NULL;
+  ret = start_maps(av + 1);
+  if (GRAPH)
+    {
+      ac = 5;
+      while (--ac > 0)
+	SDL_FreeSurface(img[ac]);
+      TTF_CloseFont(g_font);
+      TTF_Quit();
+      SDL_Quit(); /* i think you can guess it */
+    }
+  return (ret);
+}

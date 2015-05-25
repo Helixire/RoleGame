@@ -17,7 +17,7 @@ NAME	= Game
 CFLAGS	+= -W -Wall -ansi -pedantic
 CFLAGS	+= -I./include
 
-LDFLAGS	= -lSDL -lSDL_image
+LDFLAGS	= -lSDL -lSDL_image -lSDL_ttf
 
 TOOL	= tool/list.c \
 	  tool/list2.c \
@@ -25,7 +25,8 @@ TOOL	= tool/list.c \
 	  tool/str2.c \
 	  tool/str3.c \
 	  tool/get_next_line.c \
-	  tool/parser.c
+	  tool/parser.c \
+	  tool/my_sdl.c
 
 SRC	= src/main.c \
 	  src/init.c \
@@ -35,6 +36,8 @@ SRC	= src/main.c \
 	  src/attack.c \
 	  src/attack_unit.c \
 	  src/loop_g.c \
+	  src/init_turn.c \
+	  src/attack_g.c \
 	  $(TOOL)
 
 OBJ	= $(SRC:.c=.o)

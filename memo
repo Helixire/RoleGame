@@ -2,3 +2,11 @@ screen = 0
 tiles = 1
 unit = 2
 cursor = 3
+
+type :
+0 = archer
+1 = soldier
+2 = knight
+
+cursor.h = turn
+cursor.w = selected

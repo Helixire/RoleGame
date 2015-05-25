@@ -12,6 +12,7 @@
 # define _GAME_H_
 
 # include <SDL/SDL.h>
+# include <SDL/SDL_ttf.h>
 # include "tool.h"
 # include "my_error.h"
 
@@ -39,6 +40,11 @@ typedef struct	s_action
   int		(*act)();
 }		t_action;
 
+extern TTF_Font		*g_font;
+extern SDL_Surface	*img[];
+extern int		g_turn;
+extern t_unit		*g_sel;
+
 int		init(char *file, int ***grid, t_unit **unit);
 int		attack(int **grid, t_unit **list, int attack, int def);
 int		archer_attack(t_unit *defender);
@@ -50,6 +56,8 @@ void		display_grid(int **grid, char *name, t_unit *list);
 int		move(int **tab, char *str, int unit, t_unit *list);
 int		loop(char *name, int **grid, t_unit **list);
 void		init_turn(t_unit *list, int *turn);
-int		loop_g(SDL_Surface *img[], int **grid, t_unit **list);
+int		loop_g(int **grid, t_unit **list);
+int		can_attack(t_unit *atk, t_unit *def);
+void		attack_g(t_unit *atk, t_unit *def, t_unit **);
 
 #endif /* !_GAME_H_ */

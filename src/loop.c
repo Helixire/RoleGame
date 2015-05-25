@@ -11,32 +11,6 @@
 #include <stdlib.h>
 #include "game.h"
 
-void		init_turn(t_unit *list, int *turn)
-{
-  t_unit	*i;
-
-  if (turn != NULL)
-    {
-      if (*turn == 0)
-	{
-	  my_putstr(RT);
-	  *turn = 1;
-	}
-      else
-	{
-	  my_putstr(BT);
-	  *turn = 0;
-	}
-    }
-  i = list;
-  while (i != NULL)
-    {
-      i->used = 0;
-      i->move = 1;
-      i = i->next;
-    }
-}
-
 static int	check_turn(t_unit *list, int *turn)
 {
   int		nb;
@@ -49,7 +23,7 @@ static int	check_turn(t_unit *list, int *turn)
       if ((*turn == 0 && i->id < 41) || (*turn == 1 && i->id > 40))
 	{
 	  nb += 1;
-	  if (i->move == 1 || i->used == 0)
+	  if (i->move != 0)
 	    return (0);
 	}
       i = i->next;
@@ -86,10 +60,10 @@ static int	parse_l(char *tmp, int **grid, t_unit **list, int turn)
   return (0);
 }
 
-int	loop(char *name, int **grid, t_unit **list)
+int		loop(char *name, int **grid, t_unit **list)
 {
-  int	turn;
-  char	*tmp;
+  int		turn;
+  char		*tmp;
 
   turn = 0;
   while (turn < 2)

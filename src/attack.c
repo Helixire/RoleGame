@@ -35,7 +35,7 @@ static int	verif_pos(int x_attacker, int y_attacker, int x_def, int y_def)
 
 static int	fight_engage(t_unit *defender, t_unit *attacker)
 {
-  attacker->used = 1;
+  attacker->move = 0;
   if ((attacker->id >= 11 && attacker->id <= 20)
       || (attacker->id >= 41 && attacker->id <= 50))
     return (archer_attack(defender));
