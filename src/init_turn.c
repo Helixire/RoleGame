@@ -13,7 +13,6 @@
 void		init_turn(t_unit *list, int *turn)
 {
   t_unit	*i;
-  int		type;
 
   if (turn != NULL)
     {
@@ -31,8 +30,8 @@ void		init_turn(t_unit *list, int *turn)
   i = list;
   while (i != NULL)
     {
-      type = (i->id > 40) ? (i->id - 40) / 10 : i->id / 10 - 1;
-      i->move = 4 - type;
+      i->move = g_type[i->type].move;
+      i->atk = 1;
       i = i->next;
     }
   g_sel = NULL;

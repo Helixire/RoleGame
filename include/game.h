@@ -13,51 +13,62 @@
 
 # include <SDL/SDL.h>
 # include <SDL/SDL_ttf.h>
+# include <fmod.h>
 # include "tool.h"
 # include "my_error.h"
 
 # define TSIZE	32
-# define GRAPH	1
 
-# define EXIT	"exit"
-# define MAP	"map"
-# define STRAT	"strategic"
+# define BT	BLUE "\rBlue Turn                   \n" NORM
+# define RT	RED "\rRed Turn                     \n" NORM
 
-# define TOP	"top"
-# define BOTTOM	"bottom"
-# define RIGHT	"right"
-# define LEFT	"left"
+# define NONE	"NONE                                 "
+# define END	"\r--end--                          \n"
 
-# define NT	"This is not your turn.\n"
-# define ST	"Can’t attack a unit from the same side sir.\n"
-
-# define BT	BLUE "Blue Turn\n" NORM
-# define RT	RED "Red Turn\n" NORM
-
-typedef struct	s_action
+typedef struct	s_node
 {
-  char		*key;
-  int		(*act)();
-}		t_action;
+  SDL_Rect	pos;
+  int		dist;
+  int		open;
+  struct s_node	*next;
+}		t_node;
+
+struct		s_unit
+{
+  int		hp;
+  SDL_Rect	pos;
+  int		move;
+  int		atk;
+  int		faction;
+  int		type;
+  struct s_unit	*next;
+};
+
+typedef struct	s_type
+{
+  char		name[25];
+  int		hp;
+  int		move;
+  int		range;
+  int		counter[2];
+}		t_type;
 
 extern TTF_Font		*g_font;
 extern SDL_Surface	*img[];
 extern int		g_turn;
 extern t_unit		*g_sel;
+extern FMOD_SYSTEM	*g_m;
+extern FMOD_SOUND	*sound[];
+extern const int	ilegal[];
+extern const t_type	g_type[];
 
 int		init(char *file, int ***grid, t_unit **unit);
-int		attack(int **grid, t_unit **list, int attack, int def);
-int		archer_attack(t_unit *defender);
-int		soldier_attack(t_unit *defender);
-int		knight_attack(t_unit *defender);
-void		dead_unit(t_unit **list, int def);
-int		life_unit(t_unit *defender, int att, int damage);
-void		display_grid(int **grid, char *name, t_unit *list);
-int		move(int **tab, char *str, int unit, t_unit *list);
-int		loop(char *name, int **grid, t_unit **list);
 void		init_turn(t_unit *list, int *turn);
 int		loop_g(int **grid, t_unit **list);
 int		can_attack(t_unit *atk, t_unit *def);
 void		attack_g(t_unit *atk, t_unit *def, t_unit **);
+int		find_path(t_unit *unit, int **grid, t_node **res, t_unit *list);
+void		clean_node(t_node **node);
+t_node		*node_at(t_node *list, SDL_Rect *pos);
 
 #endif /* !_GAME_H_ */

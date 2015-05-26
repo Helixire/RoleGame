@@ -10,57 +10,32 @@
 
 #include <stdlib.h>
 #include "my_error.h"
-#include "tool.h"
+#include "game.h"
 
-int		add_unit(t_unit **list, const int id, const int x, const int y)
+int		add_unit(t_unit **list, const int data[4])
 {
   t_unit	*ret;
-  t_unit	*tmp;
 
   if ((ret = malloc(sizeof(*ret))) == NULL)
     return (1);
-  ret->id = id;
-  ret->pv = 30;
-  ret->range = (((id > 40) ? (id - 40) / 10 : id / 10 - 1) == 0) ? 2 : 1;
-  ret->x = x;
-  ret->y = y;
-  ret->next = NULL;
-  if (*list == NULL)
-    *list = ret;
-  else
-    {
-      tmp = *list;
-      while (tmp->next != NULL)
-	{
-	  if (tmp->id == id)
-	    {
-	      free(ret);
-	      return (2);
-	    }
-	  tmp = tmp->next;
-	}
-      tmp->next = ret;
-    }
+  ret->type = data[0];
+  ret->faction = data[1];
+  ret->pos.x = data[2];
+  ret->pos.y = data[3];
+  ret->hp = g_type[data[0]].hp;
+  ret->move = g_type[data[0]].move;
+  ret->next = *list;
+  *list = ret;
   return (0);
 }
 
-t_unit		*find_unit(t_unit *list, const int nb)
-{
-  t_unit	*tmp;
-
-  tmp = list;
-  while (tmp != NULL && tmp->id != nb)
-    tmp = tmp->next;
-  return (tmp);
-}
-
-void		rm_unit(t_unit **list, const int nb)
+void		rm_unit(t_unit **list, t_unit *unit)
 {
   t_unit	*tmp;
   t_unit	*i;
 
   i = *list;
-  while (i != NULL && i->id != nb)
+  while (i != NULL && i != unit)
     {
       tmp = i;
       i = i->next;
@@ -87,4 +62,18 @@ void		clean_unit(t_unit *list)
       tmp = tmp->next;
       free(tmp2);
     }
+}
+
+t_unit		*find_unit_at(t_unit *list, const int x, const int y)
+{
+  t_unit	*i;
+
+  i = list;
+  while (i != NULL)
+    {
+      if (i->pos.x == x && i->pos.y == y)
+	return (i);
+      i = i->next;
+    }
+  return (NULL);
 }

@@ -68,32 +68,35 @@ static int	add_line(char *line, int ***grid, int *sizeX)
   return (0);
 }
 
-static int	init_end(int **grid, t_unit **unit, int sizeX, int sizeY)
+static int	init_end(int **grid, t_unit **unit,
+			 int sizeX, int sizeY, int fd)
 {
-  int		x;
-  int		y;
+  int		i;
+  char		*str;
+  char		**tab;
+  int		tmp[4];
 
-  x = -1;
-  while (++x < sizeX)
-    if (grid[0][x] != 0 || grid[sizeY - 1][x] != 0)
+  i = -1;
+  while (++i < sizeX)
+    if (grid[0][i] != 0 || grid[sizeY - 1][i] != 0)
       return (my_error(WF));
-  y = 0;
-  while (++y < sizeY - 1)
+  while ((str = get_next_line(fd)) != NULL)
     {
-      x = 0;
-      while (++x < sizeX - 1)
-	{
-	  if (grid[y][x] == 0)
-	    return (my_error(WF));
-	  else if (grid[y][x] > 10)
-	    {
-	      if (add_unit(unit, grid[y][x], x, y) != 0)
-		return (my_error(GE));
-	      grid[y][x] = 1;
-	    }
-	}
+      tab = parse(str, " \t");
+      free(str);
+      if (tab == NULL)
+	return (my_error(EM));
+      i = -1;
+      while (tab[++i] != NULL && i < 4)
+	tmp[i] = my_getnbr(tab[i]);
+      free_tab(tab);
+      while (i < 4)
+	tmp[i++] = 0;
+      if (add_unit(unit, tmp) == 1)
+	return (my_error(EM));
     }
-  return (*unit == NULL) ? my_error(NU) : 0;
+  close(fd);
+  return (0);
 }
 
 int	init(char *file, int ***grid, t_unit **unit)
@@ -111,14 +114,13 @@ int	init(char *file, int ***grid, t_unit **unit)
   x = 0;
   y = 0;
   *grid = NULL;
-  while ((tmp = get_next_line(fd)) != NULL)
+  while ((tmp = get_next_line(fd)) != NULL && tmp[0] != 0)
     {
       if (add_line(tmp, grid, &x) == 1)
 	return (my_error(GE));
       y += 1;
     }
-  close(fd);
   if (x < 3 || y < 3)
     return (my_error(GS) - 1);
-  return (init_end(*grid, unit, x, y));
+  return (init_end(*grid, unit, x, y, fd));
 }

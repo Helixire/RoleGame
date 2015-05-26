@@ -17,27 +17,24 @@ NAME	= Game
 CFLAGS	+= -W -Wall -ansi -pedantic
 CFLAGS	+= -I./include
 
-LDFLAGS	= -lSDL -lSDL_image -lSDL_ttf
+LDFLAGS	= -lSDL -lSDL_image -lSDL_ttf -L/usr/local/bin -lfmod
 
 TOOL	= tool/list.c \
-	  tool/list2.c \
 	  tool/str.c \
 	  tool/str2.c \
 	  tool/str3.c \
+	  tool/str4.c \
 	  tool/get_next_line.c \
 	  tool/parser.c \
 	  tool/my_sdl.c
 
 SRC	= src/main.c \
 	  src/init.c \
-	  src/loop.c \
-	  src/move.c \
-	  src/display_grid.c \
-	  src/attack.c \
-	  src/attack_unit.c \
 	  src/loop_g.c \
 	  src/init_turn.c \
 	  src/attack_g.c \
+	  src/find_path.c \
+	  src/global.c \
 	  $(TOOL)
 
 OBJ	= $(SRC:.c=.o)

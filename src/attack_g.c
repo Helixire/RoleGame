@@ -12,10 +12,9 @@
 
 int	can_attack(t_unit *atk, t_unit *def)
 {
-  if (def != NULL && atk != def &&
-      atk->id + def->id >= 52 && atk->id + def->id <= 110 &&
-      (((ABS(atk->x - def->x)) <= atk->range && (ABS(atk->y - def->y)) == 0) ||
-       ((ABS(atk->y - def->y)) <= atk->range && (ABS(atk->x - def->x)) == 0)))
+  if (atk->atk != 0 && atk != def && atk->faction != def->faction &&
+      (((ABS(atk->pos.x - def->pos.x)) <= g_type[atk->type].range && (ABS(atk->pos.y - def->pos.y)) == 0) ||
+       ((ABS(atk->pos.y - def->pos.y)) <= g_type[atk->type].range && (ABS(atk->pos.x - def->pos.x)) == 0)))
     return (1);
   return (0);
 }
@@ -23,30 +22,33 @@ int	can_attack(t_unit *atk, t_unit *def)
 void		attack_g(t_unit *atk, t_unit *def, t_unit **list)
 {
   SDL_Rect	pos;
-  int		ta;
-  int		td;
   int		damage;
   char		buf[11];
   SDL_Color	color;
 
   color.r = 250;
-  color.g = 10;
-  color.b = 10;
-  ta = (atk->id > 40) ? (atk->id - 40) / 10 : atk->id / 10 - 1;
-  td = (def->id > 40) ? (def->id - 40) / 10 : def->id / 10 - 1;
-  if ((ta == 0 && td == 2) || (ta == 1 && td == 0) || (ta == 2 && td == 1))
+  color.g = 0;
+  color.b = 0;
+  if (is_in(def->type, g_type[atk->type].counter) == 1)
     damage = -15;
   else
     damage = -5;
   atk->move = 0;
-  def->pv += damage;
+  atk->atk = 0;
+  def->hp += damage;
   int_to_str(damage, buf);
-  TTF_SizeText(g_font, buf, &ta, NULL);
-  pos.x = def->x * TSIZE - TSIZE / 2 - ta / 2;
-  pos.y = def->y * TSIZE - TSIZE - 16;
+  TTF_SizeText(g_font, buf, &damage, NULL);
+  pos.x = def->pos.x * TSIZE - TSIZE / 2 - damage / 2;
+  pos.y = def->pos.y * TSIZE - TSIZE - 16;
   print_str(img[0], buf, color, &pos);
   SDL_Flip(img[0]);
+  FMOD_System_Update(g_m);
+  FMOD_System_PlaySound(g_m, sound[atk->type], NULL, 0, NULL);
   SDL_Delay(500);
-  if (def->pv <= 0)
-    rm_unit(list, def->id);
+  if (def->hp <= 0)
+    {
+      rm_unit(list, def);
+      FMOD_System_Update(g_m);
+      FMOD_System_PlaySound(g_m, sound[3], NULL, 0, NULL);
+    }
 }
