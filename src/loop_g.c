@@ -103,10 +103,10 @@ static void	space_key(SDL_Rect *cursor, int **grid,
     }
   sprintf(ttmp, "\rselected : ");
   if (g_sel)
-    sprintf(ttmp + 11, "%s has %d hp and %d movement", g_type[g_sel->type].name, g_sel->hp, g_sel->move);
+    sprintf(ttmp + 12, "%s has %d hp and %d movement", g_type[g_sel->type].name, g_sel->hp, g_sel->move);
   else
     {
-      sprintf(ttmp + 11, NONE);
+      sprintf(ttmp + 11, "pos: %d %d                                        ", cursor->x, cursor->y);
       clean_node(path);
     }
   my_putstr(ttmp);

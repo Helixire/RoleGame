@@ -82,18 +82,21 @@ static int	init_end(int **grid, t_unit **unit,
       return (my_error(WF));
   while ((str = get_next_line(fd)) != NULL)
     {
-      tab = parse(str, " \t");
-      free(str);
-      if (tab == NULL)
-	return (my_error(EM));
-      i = -1;
-      while (tab[++i] != NULL && i < 4)
-	tmp[i] = my_getnbr(tab[i]);
-      free_tab(tab);
-      while (i < 4)
-	tmp[i++] = 0;
-      if (add_unit(unit, tmp) == 1)
-	return (my_error(EM));
+      if (str[0] != 0)
+	{
+	  tab = parse(str, " \t");
+	  free(str);
+	  if (tab == NULL)
+	    return (my_error(EM));
+	  i = -1;
+	  while (tab[++i] != NULL && i < 4)
+	    tmp[i] = my_getnbr(tab[i]);
+	  free_tab(tab);
+	  while (i < 4)
+	    tmp[i++] = 0;
+	  if (add_unit(unit, tmp) == 1)
+	    return (my_error(EM));
+	}
     }
   close(fd);
   return (0);
