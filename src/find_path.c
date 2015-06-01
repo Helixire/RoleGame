@@ -96,7 +96,8 @@ int		find_path(t_unit *unit, int **grid, t_node **res, t_unit *list)
 		p.x += p.h - 1;
 	      else
 		p.y += p.h - 5;
-	      if (is_in(grid[p.y][p.x], ilegal) == 0 &&
+	      if (grid[p.y][p.x] != 0 &&
+		  is_in(grid[p.y][p.x], g_type[unit->type].illegal) == 0 &&
 		  node_at(*res, &p) == NULL &&
 		  ((t = find_unit_at(list, p.x, p.y)) == NULL ||
 		   t->faction == unit->faction))

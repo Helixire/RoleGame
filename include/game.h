@@ -50,7 +50,8 @@ typedef struct	s_type
   int		hp;
   int		move;
   int		range;
-  int		counter[2];
+  int		counter[10];
+  int		illegal[20];
 }		t_type;
 
 extern TTF_Font		*g_font;
@@ -59,7 +60,6 @@ extern int		g_turn;
 extern t_unit		*g_sel;
 extern FMOD_SYSTEM	*g_m;
 extern FMOD_SOUND	*sound[];
-extern const int	ilegal[];
 extern const t_type	g_type[];
 
 int		init(char *file, int ***grid, t_unit **unit);

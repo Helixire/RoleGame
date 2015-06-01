@@ -13,8 +13,11 @@
 int	can_attack(t_unit *atk, t_unit *def)
 {
   if (atk->atk != 0 && atk != def && atk->faction != def->faction &&
-      (((ABS(atk->pos.x - def->pos.x)) <= g_type[atk->type].range && (ABS(atk->pos.y - def->pos.y)) == 0) ||
-       ((ABS(atk->pos.y - def->pos.y)) <= g_type[atk->type].range && (ABS(atk->pos.x - def->pos.x)) == 0)))
+      atk->faction == g_turn &&
+      (((ABS(atk->pos.x - def->pos.x)) <= g_type[atk->type].range &&
+	(ABS(atk->pos.y - def->pos.y)) == 0) ||
+       ((ABS(atk->pos.y - def->pos.y)) <= g_type[atk->type].range &&
+	(ABS(atk->pos.x - def->pos.x)) == 0)))
     return (1);
   return (0);
 }

@@ -48,9 +48,9 @@ int	main(int ac, char **av)
 {
   int		ret;
 
-  FMOD_System_Create(&g_m);
-  FMOD_System_Init(g_m, 2, FMOD_INIT_NORMAL, NULL);
-  if (SDL_Init(SDL_INIT_VIDEO) == -1 || /* INIT SDL */
+  FMOD_System_Create(&g_m);                             /* load sound card */
+  FMOD_System_Init(g_m, 2, FMOD_INIT_NORMAL, NULL);     /* allow sound usage */
+  if (SDL_Init(SDL_INIT_VIDEO) == -1 ||                 /* INIT SDL */
       (img[0] = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL ||  /* Create Screen */
       (img[1] = IMG_Load("data/tiles.bmp")) == NULL ||  /* Load map img */
       (img[3] = IMG_Load("data/cursor.bmp")) == NULL || /* cursor       */
@@ -70,6 +70,7 @@ int	main(int ac, char **av)
   g_font = TTF_OpenFont("data/font/Lobster-Regular.ttf", 16);
   g_turn = 0;
   g_sel = NULL;
+  SDL_EnableKeyRepeat(200, 100);                        /* key repeat */
   ret = start_maps(av + 1);
   ac = 5;
   while (--ac > 0)
