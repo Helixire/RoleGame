@@ -10,6 +10,8 @@
 
 #include "game.h"
 
+int		g_xd;
+int		g_yd;
 TTF_Font	*g_font;
 SDL_Surface	*img[6];
 int		g_turn;
