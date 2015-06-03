@@ -9,10 +9,9 @@
 */
 
 #include "game.h"
-#include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 
-static void	print_map(int **grid)
+static void	print_map(int **grid, const int xd, const int yd)
 {
   int		x;
   int		y;
@@ -28,8 +27,8 @@ static void	print_map(int **grid)
       x = 0;
       while (grid[y][++x] != 0)
 	{
-	  pos.x = (x - 1) * TSIZE;
-	  pos.y = (y - 1) * TSIZE;
+	  pos.x = (x - 1 - xd) * TSIZE;
+	  pos.y = (y - 1 - yd) * TSIZE;
 	  size.x = (grid[y][x] - 1) * TSIZE;
 	  SDL_BlitSurface(img[1], &size, img[0], &pos);
 	}
@@ -40,34 +39,52 @@ static void	update(int **grid, t_unit *i, SDL_Rect *cursor, t_node *res)
 {
   SDL_Rect	pos;
   SDL_Rect	size;
+  static int	xd;
+  static int	yd;
+  int		gridx;
+  int		gridy;
 
+  gridx = 1;
+  while (grid[1][gridx] != 0)
+    gridx += 1;
+  gridy = 1;
+  while (grid[gridy][1] != 0)
+    gridy += 1;
+  while (cursor->x - xd > SIZEX - 4 && cursor->x + 4 < gridx)
+    xd += 1;
+  while (cursor->x - xd < 4 && cursor->x - 3 > 0)
+    xd -= 1;
+  while (cursor->y - yd > SIZEY - 4 && cursor->y + 4 < gridy)
+    yd += 1;
+  while (cursor->y - yd < 4 && cursor->y - 3 > 0)
+    yd -= 1;
   size.h = TSIZE;
   size.w = TSIZE;
   SDL_FillRect(img[0], NULL, 0);
-  print_map(grid);
+  print_map(grid, xd, yd);
   while (res != NULL)
     {
-      pos.x = res->pos.x * TSIZE - TSIZE;
-      pos.y = res->pos.y * TSIZE - TSIZE;
+      pos.x = (res->pos.x - xd) * TSIZE - TSIZE;
+      pos.y = (res->pos.y - yd) * TSIZE - TSIZE;
       SDL_BlitSurface(img[5], NULL, img[0], &pos);
       res = res->next;
     }
   while (i != NULL)
     {
-      pos.x = (i->pos.x - 1) * TSIZE;
-      pos.y = (i->pos.y - 1) * TSIZE;
+      pos.x = (i->pos.x - 1 - xd) * TSIZE;
+      pos.y = (i->pos.y - 1 - yd) * TSIZE;
       size.x = (i->atk == 0) ? TSIZE * 2 : (i->faction == 1) ? TSIZE : 0;
       size.y = i->type * TSIZE;
       SDL_BlitSurface(img[2], &size, img[0], &pos);
       i = i->next;
     }
-  pos.x = cursor->x * TSIZE - TSIZE;
-  pos.y = cursor->y * TSIZE - TSIZE;
+  pos.x = (cursor->x - xd) * TSIZE - TSIZE;
+  pos.y = (cursor->y - yd) * TSIZE - TSIZE;
   SDL_BlitSurface(img[3], NULL, img[0], &pos);
   if (g_sel != NULL)
     {
-      pos.x = g_sel->pos.x * TSIZE - TSIZE;
-      pos.y = g_sel->pos.y * TSIZE - TSIZE;
+      pos.x = (g_sel->pos.x - xd) * TSIZE - TSIZE;
+      pos.y = (g_sel->pos.y - yd) * TSIZE - TSIZE;
       SDL_BlitSurface(img[4], NULL, img[0], &pos);
     }
   SDL_Flip(img[0]);
@@ -106,7 +123,7 @@ static void	space_key(SDL_Rect *cursor, int **grid,
     sprintf(ttmp + 12, "%s has %d hp and %d movement", g_type[g_sel->type].name, g_sel->hp, g_sel->move);
   else
     {
-      sprintf(ttmp + 11, "pos: %d %d                                        ", cursor->x, cursor->y);
+      sprintf(ttmp + 12, "pos: %d %d                                        ", cursor->x, cursor->y);
       clean_node(path);
     }
   my_putstr(ttmp);

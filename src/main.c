@@ -51,7 +51,7 @@ int	main(int ac, char **av)
   FMOD_System_Create(&g_m);                             /* load sound card */
   FMOD_System_Init(g_m, 2, FMOD_INIT_NORMAL, NULL);     /* allow sound usage */
   if (SDL_Init(SDL_INIT_VIDEO) == -1 ||                 /* INIT SDL */
-      (img[0] = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL ||  /* Create Screen */
+      (img[0] = SDL_SetVideoMode(SIZEX * TSIZE, SIZEY * TSIZE, 32, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL ||  /* Create Screen */
       (img[1] = IMG_Load("data/tiles.bmp")) == NULL ||  /* Load map img */
       (img[3] = IMG_Load("data/cursor.bmp")) == NULL || /* cursor       */
       (img[2] = IMG_Load("data/unit.bmp")) == NULL ||   /* and unit     */
@@ -69,8 +69,6 @@ int	main(int ac, char **av)
   SDL_WM_SetCaption("RoleGame", NULL); /* Change window name */
   g_font = TTF_OpenFont("data/font/Lobster-Regular.ttf", 16);
   g_turn = 0;
-  g_xd = 0;
-  g_yd = 0;
   g_sel = NULL;
   SDL_EnableKeyRepeat(200, 100);                        /* key repeat */
   ret = start_maps(av + 1);

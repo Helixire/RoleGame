@@ -19,6 +19,9 @@
 
 # define TSIZE	32
 
+# define SIZEX	25
+# define SIZEY	20
+
 # define BT	BLUE "\rBlue Turn                   \n" NORM
 # define RT	RED "\rRed Turn                     \n" NORM
 
@@ -61,8 +64,6 @@ extern t_unit		*g_sel;
 extern FMOD_SYSTEM	*g_m;
 extern FMOD_SOUND	*sound[];
 extern const t_type	g_type[];
-extern int		g_xd;
-extern int		g_yd;
 
 int		init(char *file, int ***grid, t_unit **unit);
 void		init_turn(t_unit *list, int *turn);
