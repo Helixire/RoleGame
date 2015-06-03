@@ -5,7 +5,7 @@
 ** Login   <blank_p@epitech.net>
 ** 
 ** Started on  Sun May 17 16:40:55 2015 Blank Pierre
-** Last update Sun May 17 16:40:55 2015 Blank Pierre
+** Last update Tue Jun  2 20:39:12 2015 pinloche antoine
 */
 
 #include <stdlib.h>
@@ -51,7 +51,11 @@ int	main(int ac, char **av)
   FMOD_System_Create(&g_m);                             /* load sound card */
   FMOD_System_Init(g_m, 2, FMOD_INIT_NORMAL, NULL);     /* allow sound usage */
   if (SDL_Init(SDL_INIT_VIDEO) == -1 ||                 /* INIT SDL */
+<<<<<<< HEAD
       (img[0] = SDL_SetVideoMode(SIZEX * TSIZE, SIZEY * TSIZE, 32, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL ||  /* Create Screen */
+=======
+      (img[0] = SDL_SetVideoMode(800, 612, 32, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL ||  /* Create Screen */
+>>>>>>> fa1d02eb62c132ed9f16b809335fdc11abb233b9
       (img[1] = IMG_Load("data/tiles.bmp")) == NULL ||  /* Load map img */
       (img[3] = IMG_Load("data/cursor.bmp")) == NULL || /* cursor       */
       (img[2] = IMG_Load("data/unit.bmp")) == NULL ||   /* and unit     */
