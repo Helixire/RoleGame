@@ -69,6 +69,8 @@ int	main(int ac, char **av)
   SDL_WM_SetCaption("RoleGame", NULL); /* Change window name */
   g_font = TTF_OpenFont("data/font/Lobster-Regular.ttf", 16);
   g_turn = 0;
+  g_xd = 0;
+  g_yd = 0;
   g_sel = NULL;
   SDL_EnableKeyRepeat(200, 100);                        /* key repeat */
   ret = start_maps(av + 1);
